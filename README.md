@@ -17,10 +17,9 @@ Country "latitude":,	"longitude":     airport
   
 data = {
     "Country": ["Bali", "Singapore", "Thailand", "Vietnam", "Philippines"],
-    "Latitude": [22.6486, 1.3521, 15.8700, 14.0583, 12.8797],
-    "Longitude": [88.3411, 103.8198, 100.9925, 108.2772, 121.7740],
     "Airport": ["DPS", "SIN", "BKK", "SGN", "MNL"]
 }
 
 df = pd.DataFrame(data)
 print(df)
+
