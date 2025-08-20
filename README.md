@@ -1,7 +1,12 @@
 # holiday_planner
 
 
-countries around bali
 
-bali  coordinates   "latitude": 22.6486,
-	"longitude": 88.3411                         airport 
+
+                                                                                                       
+Country "latitude":,	"longitude":     airport 
+  Bali        22.6486         88.3411           DPS
+  Singapore   1.3521          103.8198          SIN
+  Thailand    15.8700         100.9925          BKK
+  
+  
