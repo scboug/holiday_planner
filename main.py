@@ -2,17 +2,12 @@ import gradio as gr
 import googlemaps
 import folium
 from selenium import webdriver
-from bs4 import BeautifulSoup
-import os
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
 import time
 import pandas as pd
-from selenium.webdriver.support.wait import WebDriverWait
 from Google_API import locations, get_places, places_map
-from Web_Scraping import hotel_scrap, hotels_data
+from Web_Scraping import hotel_scrap, hotels_data, url
+from Flights_function_and_output import get_flights, get_air
+from weather_function import get_future_weather, get_current_weather
 
 gmaps = googlemaps.Client(key="AIzaSyDlV8XL107fRm2TFinDMrk7KIvQTe9sWxY")
 
@@ -39,29 +34,69 @@ def holiday_with_all(choice):
         map_html = create_places_map(location, nearby_places, title=place_type.capitalize())
         all_maps.append(map_html)
 
-    url_hotel = 'https://www.booking.com/searchresults.en-gb.html?ss=Bali&ssne=Bali&ssne_untouched=Bali&efdco=1&label=gen173nr-10CAsoaEIea2FudmF6LXZpbGxhZ2UtcmVzb3J0LXNlbWlueWFrSAlYBGhQiAEBmAEzuAEHyAEM2AED6AEB-AEBiAIBqAIBuAK9w5HFBsACAdICJDNiZmQzYjdmLTkxM2QtNGQwMS1iYjRjLWQzNDYyMTI3NDExZNgCAeACAQ&sid=f3d7c8a7a671b3d104acc7004462101b&aid=304142&lang=en-gb&sb=1&src_elem=sb&src=index&dest_id=835&dest_type=region&checkin=2025-09-01&checkout=2025-09-02&group_adults=1&no_rooms=1&group_children=0'
+    url_hotel = url(city_country)
     driver = webdriver.Chrome()
     driver.get(url_hotel)
-    time.sleep(5)
+    time.sleep(0.5)
     hotels = hotel_scrap(driver)
     driver.quit()
     hotels_df = hotels_data(hotels)
 
     return [city_country] + all_maps + [hotels_df]
 
-destinations = ["Denpasar, Indonesia"]
+destinations = ["Denpasar, Indonesia", "Singapore, Singapore", "Bangkok, Thailand", "Ho chi min, Vietnam", "Manila, Phillippines"]
+data_airport = {
+    "Country": ["Bali", "Singapore", "Thailand", "Vietnam", "Philippines"],
+    "Airport": ["DPS", "SIN", "BKK", "SGN", "MNL"]
+}
+airport = pd.DataFrame(data_airport)
 
-with gr.Blocks() as demo:
-    gr.Markdown("# Holiday Planner")
-    gr.Markdown("Choose a destination to see all the information you'll be looking for!")
+with gr.Blocks(css=""".gradio-container {background-color: #e6f7ff;}""") as demo:
+    gr.Markdown("# Welcome to your Holiday Planner")
+    gr.Markdown(
+        """
+        Plan your next adventure with ease!  
+        Choose a destination and instantly explore:  
 
-    dropdown_city = gr.Dropdown(
-        choices=destinations,
-        label="Select Destination",
-        value="Cancun, Mexico"
+        - Top **bars, restaurants, clubs, and supermarkets** nearby  
+        - The best **hotels from Booking.com**  
+        - Flight options to get you there  
+
+        Your perfect holiday starts here — just pick a city and let us do the rest!
+        """)
+
+    gr.Markdown("# Select a Destination to Check Flight Prices")
+    drop1 = gr.Dropdown(choices=airport["Country"].tolist(), label="Select country", value="Bali", interactive=True)
+    generate_button = gr.Button("See best flights")
+    output_df = gr.DataFrame()
+    generate_button.click(fn=get_air, inputs=drop1, outputs=output_df)
+
+    gr.Markdown("# Select a Destination to see the Current Weather")
+    drop_weather_1 = gr.Dropdown(choices=airport["Country"].tolist(), label="Select country", value="Bali", interactive=True)
+    output_current_weather_df = gr.DataFrame()
+    drop_weather_1.change(
+        fn=get_current_weather,
+        inputs=drop_weather_1,
+        outputs=[output_current_weather_df]
     )
 
+    gr.Markdown("# Select a Destination to see the 7 Day Weather Forecast")
+    drop_weather_2 = gr.Dropdown(choices=airport["Country"].tolist(), label="Select country", value="Bali", interactive=True)
+    output_future_weather_df = gr.DataFrame()
+    drop_weather_2.change(
+        fn=get_future_weather,
+        inputs=drop_weather_2,
+        outputs=[output_future_weather_df]
+    )
+
+    gr.Markdown("# Select a Destination to Check Bars, Restaurants, Clubs, Supermarkets and Hotels")
+    dropdown_city = gr.Dropdown(
+        choices=destinations,
+        label="Select a Destination",
+        value="Destination"
+    )
     output_info = gr.Markdown()
+
     with gr.Row():
         output_bar = gr.HTML()
         output_restaurant = gr.HTML()
@@ -69,7 +104,9 @@ with gr.Blocks() as demo:
         output_club = gr.HTML()
         output_supermarket = gr.HTML()
 
-    output_hotels = gr.Dataframe(label="Top Hotels (Booking.com)")
+    gr.Markdown("## Top Hotels on Booking.com")
+    output_hotels = gr.Dataframe()
+
     dropdown_city.change(
         fn=holiday_with_all,
         inputs=dropdown_city,

@@ -4,12 +4,12 @@ import folium
 gmaps = googlemaps.Client(key="AIzaSyDlV8XL107fRm2TFinDMrk7KIvQTe9sWxY")
 
 def locations(city, country):
-    location = gmaps.geocode(city + country)
+    location = gmaps.geocode(city + ", " + country)
     lat = location[0]['geometry']['location']['lat']
     lng = location[0]['geometry']['location']['lng']
     return lat, lng
 
-def places(location, type):
+def get_places(location, type):
     places = gmaps.places_nearby(
         location=(location[0], location[1]),
         radius=20000,
@@ -25,6 +25,7 @@ def places_map(location, places):
             popup=place['name']
         ).add_to(map)
     return map
+
 
 
 
