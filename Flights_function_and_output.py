@@ -1,5 +1,5 @@
 #at time of posting 57 searches left
-
+#function for using flight API
 import requests
 import gradio as gr
 import json
@@ -62,4 +62,5 @@ with gr.Blocks() as demo:
     generate_button.click(fn=get_air, inputs=drop1, outputs=output_df)
 
 demo.launch()
+
 
