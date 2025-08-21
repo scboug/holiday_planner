@@ -5,10 +5,11 @@ import json
 import pandas as pd
 
 def get_flights(arrival_id):
-'''
-Function that runs the API to see best flights from london heathrow to a countries corresponding airport
-'''
+    '''
+    Function that runs the API to see best flights from london heathrow to a countries corresponding airport
+    '''
     url = "https://www.searchapi.io/api/v1/search"
+
     params = {
         "engine": "google_flights",
         "flight_type": "round_trip",
@@ -44,33 +45,14 @@ data_airport = {
 airport = pd.DataFrame(data_airport)
 
 def get_air(location):
-# Countries and corresponding airport codes of there largest airports
-data_airport = {
-    "Country": ["Bali", "Singapore", "Thailand", "Vietnam", "Philippines"],
-    "Airport": ["DPS", "SIN", "BKK", "SGN", "MNL"]
-    "Airport City":["Denpasar","Singapore","Bangkok","Ho Chi Minh City","Manila"
-]
-}
-airport = pd.DataFrame(data_airport)
-
-
-def get_air(location):
-   '''
-Function finds the airport code for the selected country and uses this to run an API which finds the best flights 
-'''
-main
+    '''
+    Function finds the airport code for the selected country and uses this to run an API which finds the best flights
+    '''
     # Find the airport code for selected country
     apt = airport.loc[airport["Country"] == location, "Airport"].values[0]
     return get_flights(apt)
 
 
-with gr.Blocks() as demo:
-    drop1 = gr.Dropdown(choices=airport["Country"].tolist(), label="Select country", value="Bali", interactive=True)
-    generate_button = gr.Button("See best flights")
-    output_df = gr.DataFrame()
-    generate_button.click(fn=get_air, inputs=drop1, outputs=output_df)
-
-demo.launch()
 
 
 
