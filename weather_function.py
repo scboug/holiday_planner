@@ -55,7 +55,7 @@ def get_current_weather(country):
  current_wind_speed_10m = current.Variables(1).Value()
  current_relative_humidity_2m = current.Variables(2).Value()
 
-    # Build DataFrame properly
+    # Build DataFrame 
  weath_data = {
     "Cloud Cover (%)": [current_cloud_cover],
     "Wind Speed (km/h)": [round(current_wind_speed_10m)],
@@ -96,7 +96,7 @@ def get_future_weather(country):
     daily = response.Daily()
     daily_temperature_2m_max = daily.Variables(0).ValuesAsNumpy()
     daily_wind_speed_10m_mean = daily.Variables(1).ValuesAsNumpy()
-
+    #Build dataframe
     daily_data = {"Date": pd.date_range(
         start=pd.to_datetime(daily.Time(), unit="s", utc=True),
         end=pd.to_datetime(daily.TimeEnd(), unit="s", utc=True),
@@ -116,7 +116,7 @@ def get_future_weather(country):
 
 
 
-
+    #show in app
 with gr.Blocks() as demo:
     drop1 = gr.Dropdown(choices=airport["Country"].tolist(), label="Select country", value="Bali", interactive=True)
     generate_current_weather_button = gr.Button("See current weather")
@@ -129,4 +129,5 @@ with gr.Blocks() as demo:
 
 
 demo.launch()
+
 
