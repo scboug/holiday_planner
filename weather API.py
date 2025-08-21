@@ -1,4 +1,4 @@
-#weather api
+#Weather API
 
 import pip
 pip.main(['install', ' openmeteo-requests'])
@@ -12,13 +12,10 @@ from retry_requests import retry
 
 
 
-# Setup the Open-Meteo API client with cache and retry on error
+# Use API
 cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
 retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
 openmeteo = openmeteo_requests.Client(session = retry_session)
-
-# Make sure all required weather variables are listed here
-# The order of variables in hourly or daily is important to assign them correctly below
 url = "https://api.open-meteo.com/v1/forecast"
 params = {
 	"latitude": 22.6486,
@@ -28,6 +25,7 @@ params = {
 	"timezone": "GMT",
 }
 responses = openmeteo.weather_api(url, params=params)
+
 
 # Process first location. Add a for-loop for multiple locations or weather models
 response = responses[0]
@@ -48,11 +46,10 @@ current_relative_humidity_2m = current.Variables(2).Value()
 
 
 print(f"Current cloud cover: {current_cloud_cover}%")
-
 print(f"Current wind speed:{round(current_wind_speed_10m,2)}km/h")
 print(f"Current humidity: {current_relative_humidity_2m}%")
 
-#Forecast stats 7 days
+#Forecast statistics for next 7 days
 daily = response.Daily()
 daily_temperature_2m_max = daily.Variables(0).ValuesAsNumpy()
 daily_wind_speed_10m_mean = daily.Variables(1).ValuesAsNumpy()
@@ -69,4 +66,5 @@ daily_data["Wind speed"] = daily_wind_speed_10m_mean
 
 daily_dataframe = pd.DataFrame(data = daily_data)
 print("\Forecast data\n", daily_dataframe)
+
 
