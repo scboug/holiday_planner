@@ -1,5 +1,4 @@
 #at time of posting 57 searches left
-#function for using flight API
 import requests
 import gradio as gr
 import json
@@ -37,7 +36,14 @@ Function that runs the API to see best flights from london heathrow to a countri
 
     return pd.DataFrame(records)
 
+# Countries → Airports
+data_airport = {
+    "Country": ["Bali", "Singapore", "Thailand", "Vietnam", "Philippines"],
+    "Airport": ["DPS", "SIN", "BKK", "SGN", "MNL"]
+}
+airport = pd.DataFrame(data_airport)
 
+def get_air(location):
 # Countries and corresponding airport codes of there largest airports
 data_airport = {
     "Country": ["Bali", "Singapore", "Thailand", "Vietnam", "Philippines"],
@@ -52,6 +58,7 @@ def get_air(location):
    '''
 Function finds the airport code for the selected country and uses this to run an API which finds the best flights 
 '''
+main
     # Find the airport code for selected country
     apt = airport.loc[airport["Country"] == location, "Airport"].values[0]
     return get_flights(apt)
