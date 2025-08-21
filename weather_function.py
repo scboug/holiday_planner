@@ -7,6 +7,7 @@ import folium
 import requests
 import gradio as gr
 gmaps = googlemaps.Client(key="AIzaSyDlV8XL107fRm2TFinDMrk7KIvQTe9sWxY")
+#data about airports
 data_airport = {
     "Country": ["Bali", "Singapore", "Thailand", "Vietnam", "Philippines"],
     "Airport": ["DPS", "SIN", "BKK", "SGN", "MNL"],
@@ -14,6 +15,7 @@ data_airport = {
 ]
 }
 airport = pd.DataFrame(data_airport)
+
 def locations(city, country):
     location = gmaps.geocode(city + country)
     lat = location[0]['geometry']['location']['lat']
@@ -120,6 +122,7 @@ with gr.Blocks() as demo:
     generate_future_weather_button = gr.Button("See forecast for next 7 days")
     output_future_weather_df = gr.DataFrame()
     generate_future_weather_button.click(fn=get_future_weather, inputs=drop1, outputs=output_future_weather_df)
+
 
 
 demo.launch()
