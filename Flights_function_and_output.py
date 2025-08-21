@@ -42,6 +42,8 @@ Function that runs the API to see best flights from london heathrow to a countri
 data_airport = {
     "Country": ["Bali", "Singapore", "Thailand", "Vietnam", "Philippines"],
     "Airport": ["DPS", "SIN", "BKK", "SGN", "MNL"]
+    "Airport City":["Denpasar","Singapore","Bangkok","Ho Chi Minh City","Manila"
+]
 }
 airport = pd.DataFrame(data_airport)
 
@@ -62,5 +64,6 @@ with gr.Blocks() as demo:
     generate_button.click(fn=get_air, inputs=drop1, outputs=output_df)
 
 demo.launch()
+
 
 
