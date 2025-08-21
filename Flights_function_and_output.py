@@ -6,6 +6,9 @@ import json
 import pandas as pd
 
 def get_flights(arrival_id):
+'''
+Function that runs the API to see best flights from london heathrow to a countries corresponding airport
+'''
     url = "https://www.searchapi.io/api/v1/search"
     params = {
         "engine": "google_flights",
@@ -35,7 +38,7 @@ def get_flights(arrival_id):
     return pd.DataFrame(records)
 
 
-# Countries → Airports
+# Countries and corresponding airport codes of there largest airports
 data_airport = {
     "Country": ["Bali", "Singapore", "Thailand", "Vietnam", "Philippines"],
     "Airport": ["DPS", "SIN", "BKK", "SGN", "MNL"]
@@ -44,6 +47,9 @@ airport = pd.DataFrame(data_airport)
 
 
 def get_air(location):
+   '''
+Function finds the airport code for the selected country and uses this to run an API which finds the best flights 
+'''
     # Find the airport code for selected country
     apt = airport.loc[airport["Country"] == location, "Airport"].values[0]
     return get_flights(apt)
@@ -56,3 +62,4 @@ with gr.Blocks() as demo:
     generate_button.click(fn=get_air, inputs=drop1, outputs=output_df)
 
 demo.launch()
+
