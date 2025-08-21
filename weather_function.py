@@ -17,6 +17,7 @@ data_airport = {
 airport = pd.DataFrame(data_airport)
 
 def locations(city, country):
+    '''finds the latitude and longitude of a location .'''
     location = gmaps.geocode(city + country)
     lat = location[0]['geometry']['location']['lat']
     lng = location[0]['geometry']['location']['lng']
@@ -24,6 +25,7 @@ def locations(city, country):
 
 
 def get_current_weather(country):
+    '''Gets information about the current weather in a given location using an API'''
     #find coordinates
  city = airport.loc[airport["Country"] == country, "Airport City"].values[0]
  latlong=locations(city,country)
@@ -66,6 +68,7 @@ def get_current_weather(country):
 
 
 def get_future_weather(country):
+     '''Gets information about the forecasted weather in the next seven days in a given location using an API'''
     # Find coordinates
     city = airport.loc[airport["Country"] == country, "Airport City"].values[0]
     latlong = locations(city, country)
@@ -126,3 +129,4 @@ with gr.Blocks() as demo:
 
 
 demo.launch()
+
