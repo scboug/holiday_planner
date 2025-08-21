@@ -11,7 +11,7 @@ from retry_requests import retry
 
 
 
-#bali table
+
 # Setup the Open-Meteo API client with cache and retry on error
 cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
 retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
@@ -40,7 +40,7 @@ print(f"Timezone difference to GMT+0: {response.UtcOffsetSeconds()}s")
 
 
 
-# Current stats
+# Current Statistics about the weather at Location
 current = response.Current()
 current_cloud_cover = current.Variables(0).Value()
 current_wind_speed_10m = current.Variables(1).Value()
@@ -69,3 +69,4 @@ daily_data["Wind speed"] = daily_wind_speed_10m_mean
 
 daily_dataframe = pd.DataFrame(data = daily_data)
 print("\Forecast data\n", daily_dataframe)
+
