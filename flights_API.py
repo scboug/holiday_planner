@@ -6,9 +6,7 @@ import json
 
 
 
-#bali best flights leaving 26/08/26
-#from heathrow to bali airport
-#note that limited number of requests for this api at time of writing only 67 request left
+# Runs API to find best flights
 url = "https://www.searchapi.io/api/v1/search"
 params = {
   "engine": "google_flights",
@@ -23,6 +21,9 @@ params = {
 
 response = requests.get(url, params=params)
 
+
+
+#creates dataframe of best flights
 
 df = json.loads(response.text)
 
@@ -46,3 +47,4 @@ for option in df["best_flights"]:
 
 df = pd.DataFrame(records)
 print(df)
+
