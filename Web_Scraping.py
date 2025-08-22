@@ -10,6 +10,10 @@ import pandas as pd
 from selenium.webdriver.support.wait import WebDriverWait
 
 def hotel_scrap(driver):
+    """
+    Scrapes hotel information including name, price and rating.
+    Returns list of tuples each tuple contains one hotel information.
+    """
     hotels = []
     cards = driver.find_elements(By.CSS_SELECTOR, "div[data-testid='property-card']")
     for card in cards[:30]:
@@ -29,6 +33,10 @@ def hotel_scrap(driver):
     return hotels
 
 def hotels_data(hotels):
+    """
+    Converts a list of scraped hotels to a dataframe.
+    Returns a dataframe containing hotel information.
+    """
     h = pd.DataFrame(hotels)
     h[2] = h[2].str.extract(r"(\d+(?:\.\d+)?)")
     h = h.rename(columns={
@@ -39,6 +47,10 @@ def hotels_data(hotels):
     return h
 
 def url(location):
+    """
+    Selects the correct URL for the correct location.
+    Returns the correct URL.
+    """
     if "Singapore, Singapore" in location:
         return ("https://www.booking.com/searchresults.en-gb.html?ss=Singapore%2C+Singapore&efdco=1&label=en-gb-booking-"
                 "desktop-hRhoqrdHw8G4B1ptg7ui8AS652796016378%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3A"
