@@ -1,5 +1,6 @@
 # Welcome to Holiday Planner!
 
+
 This is a Python project where you can plan your holiday in style.
 Simply choose a city and country, and the program will:
 

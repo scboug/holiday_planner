@@ -1,4 +1,4 @@
-#at time of posting 57 searches left
+#at time of posting 35 searches left
 import requests
 import gradio as gr
 import json
@@ -51,6 +51,7 @@ def get_air(location):
     # Find the airport code for selected country
     apt = airport.loc[airport["Country"] == location, "Airport"].values[0]
     return get_flights(apt)
+
 
 
 
