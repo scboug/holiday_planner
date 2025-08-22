@@ -7,8 +7,9 @@ import folium
 import requests
 import gradio as gr
 
-
+#google API
 gmaps = googlemaps.Client(key="AIzaSyDlV8XL107fRm2TFinDMrk7KIvQTe9sWxY")
+
 #data about airports
 data_airport = {
     "Country": ["Bali", "Singapore", "Thailand", "Vietnam", "Philippines"],
@@ -18,13 +19,20 @@ data_airport = {
 }
 airport = pd.DataFrame(data_airport)
 
+
 def locations(city, country):
+    '''
+This function gets the coordinates of a location
+'''
     location = gmaps.geocode(city + country)
     lat = location[0]['geometry']['location']['lat']
     lng = location[0]['geometry']['location']['lng']
     return lat, lng
 
 def get_current_weather(country):
+       '''
+This function uses an API to get information about weather in a given location
+'''
     #find coordinates
     city = airport.loc[airport["Country"] == country, "Airport City"].values[0]
     latlong=locations(city,country)
@@ -64,6 +72,9 @@ def get_current_weather(country):
     return today_data
 
 def get_future_weather(country):
+       '''
+This function uses an API to get information about the forecasted weather for the next seven days for a given location
+'''
     # Find coordinates
     city = airport.loc[airport["Country"] == country, "Airport City"].values[0]
     latlong = locations(city, country)
